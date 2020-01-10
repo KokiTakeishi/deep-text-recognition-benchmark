@@ -40,14 +40,12 @@ def demo(opt):
         shuffle=False,
         num_workers=int(opt.workers),
         collate_fn=AlignCollate_demo, pin_memory=True)
+
     # predict
     model.eval()
     with torch.no_grad():
         for image_tensors, image_path_list in demo_loader:
             batch_size = image_tensors.size(0)
-            print("batch_size", batch_size)
-            print("opt.workers", opt.workers)
-            print("opt.opt.batch_size", opt.batch_size)
             image = image_tensors.to(device)
             # For max length prediction
             length_for_pred = torch.IntTensor([opt.batch_max_length] * batch_size).to(device)
@@ -63,8 +61,6 @@ def demo(opt):
                 preds_str = converter.decode(preds_index.data, preds_size.data)
 
             else:
-                # print(text_for_pred)
-                # print(image)
                 preds = model(image, text_for_pred, is_train=False)
 
                 # select max probabilty (greedy decoding) then decode index to character
@@ -100,7 +96,7 @@ if __name__ == '__main__':
     parser.add_argument('--imgH', type=int, default=32, help='the height of the input image')
     parser.add_argument('--imgW', type=int, default=100, help='the width of the input image')
     parser.add_argument('--rgb', action='store_true', help='use rgb input')
-    parser.add_argument('--character', type=str, default='0123456789abcdefghijklmnopqrstuvwxyz', help='character label')
+    parser.add_argument('--character', type=str, default='アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨワヲンバビブベボダヅデドザジズゼゾッャュョァィガギグゲゴ0123456789', help='character label')
     parser.add_argument('--sensitive', action='store_true', help='for sensitive character mode')
     parser.add_argument('--PAD', action='store_true', help='whether to keep ratio then pad for image resize')
     """ Model Architecture """
