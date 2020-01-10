@@ -1,4 +1,4 @@
-gtFile = './train/gt.txt'
+gtFile = './data/gt.txt'
 
 with open(gtFile, 'r', encoding='utf-8') as data:
     datalist = data.readlines()
